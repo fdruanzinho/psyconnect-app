@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  frontend:
+    image: frontendpsyconnect
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - app_network
+
+  backend:
+    image: ruanlucas05/backendpsyconnect:1.0
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - app_network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_psyconnect
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: psyconnect
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
